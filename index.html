@@ -4392,13 +4392,13 @@ varying float vFacing;
       float hash(float n) { return fract(sin(n * 127.1) * 43758.5453); }
       // one speck: starts at a random spot near the rim, drifts slowly in to the core, fading in and out on the way
       vec3 speck(float fk) {
-        float speed = 0.022 + 0.014 * hash(phase * 91.0 + fk * 13.0);
+        float speed = 0.055 + 0.03 * hash(phase * 91.0 + fk * 13.0);
         float cyc = t * speed + hash(phase * 57.0 + fk * 7.0);
         float prog = fract(cyc), life = mod(floor(cyc), 8.0);
         float ang = 6.2832 * hash(phase * 311.0 + fk * 17.0 + life * 3.7);
         float r0 = 0.6 + 0.3 * hash(phase * 173.0 + fk * 29.0 + life * 5.3);
         float rad = mix(r0, 0.12, prog);
-        float fade = sin(prog * 3.14159); fade *= fade;
+        float fade = sin(prog * 3.14159);
         return vec3(rad * cos(ang), rad * sin(ang), fade * 0.7);
       }
       void main() { vPh = phase; vB = bright; vS0 = speck(0.0); vS1 = speck(1.0); vS2 = speck(2.0);
@@ -4407,7 +4407,7 @@ varying float vFacing;
         vec2 q = gl_PointCoord * 2.0 - 1.0;
         float r = length(q);
         // the core: a small dot that twinkles
-        float twinkle = 0.55 + 0.45 * sin(t * 2.2 + vPh * 6.2832);
+        float twinkle = 0.55 + 0.45 * sin(t * 0.45 + vPh * 6.2832);
         float a = smoothstep(0.20, 0.09, r) * twinkle;
         a = max(a, smoothstep(0.075, 0.025, length(q - vS0.xy)) * vS0.z);
         a = max(a, smoothstep(0.075, 0.025, length(q - vS1.xy)) * vS1.z);
